@@ -3,7 +3,6 @@ package entities;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class Passeggero  extends Entity{
   
@@ -14,7 +13,7 @@ public class Passeggero  extends Entity{
   private String nazionalita;
   private String email;
   private String numeroTelefono;  
-  private List<Biglietto> lb = new ArrayList<>();
+  private List<Biglietto> listaBiglietti = new ArrayList<>();
 
    public Passeggero(){}
 
@@ -95,12 +94,12 @@ public class Passeggero  extends Entity{
    }
 
    public List<Biglietto> getLb() {
-     return lb;
+     return listaBiglietti;
    }
 
-   public void setLb(List<Biglietto> lb) {
-    if(lb == null) lb = new ArrayList<>();
-     this.lb = lb;
+   public void setListaBiglietti(List<Biglietto> listaBiglietti) {
+    if(listaBiglietti == null) listaBiglietti = new ArrayList<>();
+     this.listaBiglietti = listaBiglietti;
    }
  
 

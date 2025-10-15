@@ -44,23 +44,23 @@ public class View {
     public String render (Entity e) {
         String template=loadTemplate("Entity.txt");
         template=template.replace("[ID]", String.valueOf(e.getId()));
-        if (e instanceof Bagaglio s){
-            template+=renderBagaglio(s);
-        } else if (e instanceof Biglietto a){
-            template+=renderBiglietto(a);
-        } else if (e instanceof Passeggero b) {
-            template+= renderPasseggeri(b);
+        if (e instanceof Bagaglio bagaglio){
+            template+=renderBagaglio(bagaglio);
+        } else if (e instanceof Biglietto bagaglio){
+            template+=renderBiglietto(bagaglio);
+        } else if (e instanceof Passeggero passeggero) {
+            template+= renderPasseggeri(passeggero);
         }
         return template;
     }
 
-    public String renderBagaglio (Entity bagaglio){
+    public String renderBagaglio (Entity e){
         String template =loadTemplate("Bagaglio.txt");
         
-        if(bagaglio instanceof Bagaglio a){
-            template=template.replace("[ETICHETTA]", a.getCodiceEtichetta())   
-                            .replace("[PESO]", String.valueOf(a.getPeso()))
-                            .replace("[SOVRAPPESO]", a.isOversize()? "SI": "NO");
+        if(e instanceof Bagaglio bagaglio){
+            template=template.replace("[ETICHETTA]", bagaglio.getCodiceEtichetta())   
+                            .replace("[PESO]", String.valueOf(bagaglio.getPeso()))
+                            .replace("[SOVRAPPESO]", bagaglio.isOversize()? "SI": "NO");
 
         } return template;
     }
@@ -68,23 +68,23 @@ public class View {
     public String renderBiglietto (Entity e){
         String template =loadTemplate("Biglietto.txt");
         
-        if(e instanceof Biglietto a){
-            template=template.replace("[NUMERO]", a.getNumeroBiglietto())   
-                             .replace("[CLASSE]", ""+a.getClasseTariffaria())
-                             .replace("[CABINA]", a.getCabinClass())
-                             .replace("[POSTO]", a.getNumeroPosto())
-                             .replace("[PREZZO]", String.valueOf(a.getPrezzo()))
-                             .replace("[VALUTA]", ""+ a.getValuta())
-                             .replace("[STATO]", a.getStatoBiglietto())
-                             .replace("LISTA BAGAGLI", renderListaBagagli(a.getBagagli()));
+        if(e instanceof Biglietto biglietto){
+            template=template.replace("[NUMERO]", biglietto.getNumeroBiglietto())   
+                             .replace("[CLASSE]", ""+biglietto.getClasseTariffaria())
+                             .replace("[CABINA]", biglietto.getCabinClass())
+                             .replace("[POSTO]", biglietto.getNumeroPosto())
+                             .replace("[PREZZO]", String.valueOf(biglietto.getPrezzo()))
+                             .replace("[VALUTA]", ""+ biglietto.getValuta())
+                             .replace("[STATO]", biglietto.getStatoBiglietto())
+                             .replace("[LISTA BAGAGLI]", renderListaBagagli(biglietto.getBagagli()));
 
         } return template;
     }
 
-    public String renderListaBagagli (List<Bagaglio> lb){
+    public String renderListaBagagli (List<Bagaglio> listaBagagli){
         String ris="";          
-        for (Bagaglio s:lb){
-            ris+=renderBagaglio(s);
+        for (Bagaglio bagaglio:listaBagagli){
+            ris+=renderBagaglio(bagaglio);
 
         } return ris;
     }
@@ -92,23 +92,23 @@ public class View {
      public String renderPasseggeri (Entity e){
         String template =loadTemplate("Passeggeri.txt");
         
-        if(e instanceof Passeggero a){
-            template=template.replace("[NOME]", a.getNome())   
-                             .replace("[COGNOME]", a.getCognome())
-                             .replace("[DOB]", ""+ a.getDataNascita())
-                             .replace("[N.DOCUMENTO]", a.getNumeroDocumento())
-                             .replace("[NAZIONALITA]", a.getNazionalita())
-                             .replace("[EMAIL]", ""+ a.getEmail())
-                             .replace("[TELEFONO]", a.getNumeroTelefono())
-                             .replace("[LISTA BIGLIETTI]", renderListaBiglietti(a.getLb()));
+        if(e instanceof Passeggero passeggero){
+            template=template.replace("[NOME]", passeggero.getNome())   
+                             .replace("[COGNOME]", passeggero.getCognome())
+                             .replace("[DOB]", ""+ passeggero.getDataNascita())
+                             .replace("[N.DOCUMENTO]", passeggero.getNumeroDocumento())
+                             .replace("[NAZIONALITA]", passeggero.getNazionalita())
+                             .replace("[EMAIL]", ""+ passeggero.getEmail())
+                             .replace("[TELEFONO]", passeggero.getNumeroTelefono())
+                             .replace("[LISTA BIGLIETTI]", renderListaBiglietti(passeggero.getLb()));
 
         } return template;
     }
 
-     public String renderListaBiglietti (List<Biglietto> lb){
+     public String renderListaBiglietti (List<Biglietto> listaBiglietti){
         String ris="";          
-        for (Biglietto s:lb){
-            ris+=renderBiglietto(s);
+        for (Biglietto biglietto:listaBiglietti){
+            ris+=renderBiglietto(biglietto);
 
         } return ris;
     }

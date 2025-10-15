@@ -19,10 +19,10 @@ public class PasseggeroController {
     public String list(){
         //StringBuilder stringBuilder= new StringBuilder();
        String passeggeroGraficato=new String();
-        for (Passeggero p: passeggeroService.findAll()){
+        for (Passeggero passeggero: passeggeroService.findAll()){
 
             //stringBuilder.append(view.renderAlbum(a));
-            passeggeroGraficato+=view.renderPasseggeri(p)+"\n";
+            passeggeroGraficato+=view.renderPasseggeri(passeggero)+"\n";
         }
         return passeggeroGraficato;
     }
