@@ -34,21 +34,21 @@ public class BagaglioDao implements GenericDao<Bagaglio> {
     }
 
     @Override
-    public Integer addEntity(Bagaglio b) {
+    public Integer addEntity(Bagaglio bagaglio) {
 
-        if (b == null) {
+        if (bagaglio == null) {
             return null;
         }
 
         Integer id = DATABASE.executeUpdate(
             INSERT,
-            b.getCodiceEtichetta(),
-            b.getPeso() == null ? null : String.valueOf(b.getPeso()),
-            b.isOversize() ? "1" : "0"
+            bagaglio.getCodiceEtichetta(),
+            bagaglio.getPeso() == null ? null : String.valueOf(bagaglio.getPeso()),
+            bagaglio.isOversize() ? "1" : "0"
             
         );
 
-        b.setId(id);
+        bagaglio.setId(id);
         return id;
     }
 
@@ -59,18 +59,18 @@ public class BagaglioDao implements GenericDao<Bagaglio> {
         return mappa;
     }
     @Override
-    public void update(Bagaglio b) {
+    public void update(Bagaglio bagaglio) {
         
-        if (b == null || b.getId() == null){
+        if (bagaglio == null || bagaglio.getId() == null){
             return;
         }
 
         DATABASE.executeUpdate(
             UPDATE,
-            b.getCodiceEtichetta(),
-            b.getPeso() == null ? null : String.valueOf(b.getPeso()),
-            b.isOversize() ? "1" : "0",
-            String.valueOf(b.getId()));
+            bagaglio.getCodiceEtichetta(),
+            bagaglio.getPeso() == null ? null : String.valueOf(bagaglio.getPeso()),
+            bagaglio.isOversize() ? "1" : "0",
+            String.valueOf(bagaglio.getId()));
     }
     @Override
     public void delete(Integer id) {

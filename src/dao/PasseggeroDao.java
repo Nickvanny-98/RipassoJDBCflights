@@ -33,21 +33,21 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
     }
 
     @Override
-    public Integer addEntity(Passeggero b) {
+    public Integer addEntity(Passeggero passeggero) {
 
-        if (b == null) {
+        if (passeggero == null) {
             return null;
         }
 
         Integer id = DATABASE.executeUpdate(
             INSERT,
-            b.getNome(),
-            b.getCognome(),
-            b.getDataNascita() == null ? null : b.getDataNascita()+"",
-            b.getNumeroDocumento(),
-            b.getNazionalita(),
-            b.getEmail(),
-            b.getNumeroTelefono()
+            passeggero.getNome(),
+            passeggero.getCognome(),
+            passeggero.getDataNascita() == null ? null : passeggero.getDataNascita()+"",
+            passeggero.getNumeroDocumento(),
+            passeggero.getNazionalita(),
+            passeggero.getEmail(),
+            passeggero.getNumeroTelefono()
             
         );
 
@@ -62,22 +62,22 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
         return mappa;
     }
     @Override
-    public void update(Passeggero b) {
+    public void update(Passeggero passeggero) {
         
-        if (b == null || b.getId() == null){
+        if (passeggero == null || passeggero.getId() == null){
             return;
         }
 
         DATABASE.executeUpdate(
             UPDATE,
-            b.getNome(),
-            b.getCognome(),
-            b.getDataNascita() == null ? null : b.getDataNascita()+"",
-            b.getNumeroDocumento(),
-            b.getNazionalita(),
-            b.getEmail(),
-            b.getNumeroTelefono(),
-            String.valueOf(b.getId()));
+            passeggero.getNome(),
+            passeggero.getCognome(),
+            passeggero.getDataNascita() == null ? null : b.getDataNascita()+"",
+            passeggero.getNumeroDocumento(),
+            passeggero.getNazionalita(),
+            passeggero.getEmail(),
+            passeggero.getNumeroTelefono(),
+            String.valueOf(passeggero.getId()));
     }
     @Override
     public void delete(Integer id) {

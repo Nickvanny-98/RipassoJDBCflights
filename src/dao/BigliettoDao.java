@@ -34,25 +34,25 @@ public class BigliettoDao implements GenericDao<Biglietto> {
     }
 
     @Override
-    public Integer addEntity(Biglietto b) {
+    public Integer addEntity(Biglietto biglietto) {
 
-        if (b == null) {
+        if (biglietto == null) {
             return null;
         }
 
         Integer id = DATABASE.executeUpdate(
             INSERT,
-            b.getNumeroBiglietto(),
-            b.getClasseTariffaria()+"",
-            b.getCabinClass(),
-            b.getNumeroPosto(),
-            b.getPrezzo() == null ? null : b.getPrezzo()+"",
-            b.getValuta()+"",
-            b.getStatoBiglietto()
+            biglietto.getNumeroBiglietto(),
+            biglietto.getClasseTariffaria()+"",
+            biglietto.getCabinClass(),
+            biglietto.getNumeroPosto(),
+            biglietto.getPrezzo() == null ? null : biglietto.getPrezzo()+"",
+            biglietto.getValuta()+"",
+            biglietto.getStatoBiglietto()
             
         );
 
-        b.setId(id);
+        biglietto.setId(id);
         return id;
     }
 
@@ -63,22 +63,22 @@ public class BigliettoDao implements GenericDao<Biglietto> {
         return mappa;
     }
     @Override
-    public void update(Biglietto b) {
+    public void update(Biglietto biglietto) {
         
-        if (b == null || b.getId() == null){
+        if (biglietto == null || biglietto.getId() == null){
             return;
         }
 
         DATABASE.executeUpdate(
             UPDATE,
-            b.getNumeroBiglietto(),
-            b.getClasseTariffaria()+"",
-            b.getCabinClass(),
-            b.getNumeroPosto(),
-            b.getPrezzo() == null ? null : b.getPrezzo()+"",
-            b.getValuta()+"",
-            b.getStatoBiglietto(),
-            String.valueOf(b.getId()));
+            biglietto.getNumeroBiglietto(),
+            biglietto.getClasseTariffaria()+"",
+            biglietto.getCabinClass(),
+            biglietto.getNumeroPosto(),
+            biglietto.getPrezzo() == null ? null : b.getPrezzo()+"",
+            biglietto.getValuta()+"",
+            biglietto.getStatoBiglietto(),
+            String.valueOf(biglietto.getId()));
     }
     @Override
     public void delete(Integer id) {
