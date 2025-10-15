@@ -23,31 +23,31 @@ public final class PasseggeroService implements IService<Passeggero>{
     }
     
     public static synchronized PasseggeroService getInstance(){
-        if (instance ==null) instance=new PasseggeroService();
+        if (instance == null) instance = new PasseggeroService();
         return  instance;
     }
     //---------------------
 
 
-    public void save (Passeggero t){
-        if (t==null)   
+    public void save (Passeggero passeggero){
+        if (passeggero==null)   
                     return;
-                if(t.getId() == null || t.getId() == 0)
-                    passeggeroDao.addEntity(t); 
+                if(passeggero.getId() == null || passeggero.getId() == 0)
+                    passeggeroDao.addEntity(passeggero); 
                 else
-                    passeggeroDao.update(t);
+                    passeggeroDao.update(passeggero);
         }  
 
 
     public List<Passeggero> findAll (){
-        Map<Integer, Map<String,String>> ris = passeggeroDao.readAll();
-        List<Passeggero> lb = new ArrayList<>();
-        for(Map<String,String> m : ris.values()){
-            Passeggero b = (Passeggero)Factory.getInstance().make(m);
-            b.setLb(bigliettoService.findByPassenger(b.getId()));
-            lb.add(b);
+        Map<Integer, Map<String,String>> mappaPasseggeri = passeggeroDao.readAll();
+        List<Passeggero> listaPasseggeri = new ArrayList<>();
+        for(Map<String,String> mappa : mappaPasseggeri.values()){
+            Passeggero passeggero = (Passeggero)Factory.getInstance().make(mappa);
+            passeggero.setListaBiglietti(bigliettoService.findByPassenger(passeggero.getId()));
+            listaPasseggeri.add(passeggero);
         }
-        return lb;
+        return listaPasseggeri;
     }
  
     public void delete (Integer id){
@@ -56,29 +56,29 @@ public final class PasseggeroService implements IService<Passeggero>{
     }
 
      public List<Passeggero> findByName (String name){
-        List<Passeggero> lb = new ArrayList<>();
+        List<Passeggero> listaPasseggeri = new ArrayList<>();
         if(name != null && !name.isBlank() ) {
-           Map<Integer, Map<String,String>> ris= passeggeroDao.findByName(name);
-            for (Map<String, String> m: ris.values()){
-            Passeggero b=(Passeggero)Factory.getInstance().make(m);
-            b.setLb(bigliettoService.findByPassenger(b.getId()));
-            lb.add(b);
+           Map<Integer, Map<String,String>> mappaPasseggeri= passeggeroDao.findByName(name);
+            for (Map<String, String> mappa: mappaPasseggeri.values()){
+            Passeggero passeggero=(Passeggero)Factory.getInstance().make(mappa);
+            passeggero.setListaBiglietti(bigliettoService.findByPassenger(passeggero.getId()));
+            listaPasseggeri.add(passeggero);
                 
             }
         }
-        return lb;
+        return listaPasseggeri;
     }
 
      @Override
      public Passeggero findById(Integer id) {
-        Passeggero p= null; 
+        Passeggero passeggero= null; 
         if(id != null ){
-            p=(Passeggero)Factory.getInstance().make(passeggeroDao.findById(id));//crea oggetto
-            p.setLb(bigliettoService.findByPassenger(p.getId())); //setta la lista di biglietti 
+            passeggero=(Passeggero)Factory.getInstance().make(passeggeroDao.findById(id));//crea oggetto
+            passeggero.setListaBiglietti(bigliettoService.findByPassenger(passeggero.getId())); //setta la lista di biglietti 
 
             
          }
-         return p;
+         return passeggero;
        
      }
 

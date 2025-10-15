@@ -31,28 +31,28 @@ public class BigliettoService implements IService<Biglietto>{
 
 
     @Override
-    public void save(Biglietto t) {
+    public void save(Biglietto biglietto) {
         
-         if (t==null)   
+         if (biglietto==null)   
             return;
-        if(t.getId() == null || t.getId() == 0)
-            bigliettoDao.addEntity(t); 
+        if(biglietto.getId() == null || biglietto.getId() == 0)
+            bigliettoDao.addEntity(biglietto); 
         else
-             bigliettoDao.update(t);
+             bigliettoDao.update(biglietto);
         }
 
     
 
     @Override
     public List<Biglietto> findAll() {
-        Map<Integer, Map<String,String>> ris = bigliettoDao.readAll();
-        List<Biglietto> lb = new ArrayList<>();
-        for(Map<String,String> m : ris.values()){
-            Biglietto b = (Biglietto)Factory.getInstance().make(m);
-            b.setBagagli(bagaglioService.findByTicket(b.getId()));
-            lb.add(b);
+        Map<Integer, Map<String,String>> mappaBiglietti = bigliettoDao.readAll();
+        List<Biglietto> listaBiglietti = new ArrayList<>();
+        for(Map<String,String> mappa : mappaBiglietti.values()){
+            Biglietto biglietto = (Biglietto)Factory.getInstance().make(mappa);
+            biglietto.setBagagli(bagaglioService.findByTicket(biglietto.getId()));
+            listaBiglietti.add(biglietto);
         }
-        return lb;
+        return listaBiglietti;
     }
 
     @Override
@@ -63,19 +63,19 @@ public class BigliettoService implements IService<Biglietto>{
 
     @Override
     public Biglietto findById(Integer id) {
-        Map<String,String> ris = bigliettoDao.findById(id);
-        Biglietto b = (Biglietto)Factory.getInstance().make(ris);
-        b.setBagagli(bagaglioService.findByTicket(b.getId()));
-        return b;
+        Map<String,String> mappaBiglietti = bigliettoDao.findById(id);
+        Biglietto biglietto = (Biglietto)Factory.getInstance().make(mappaBiglietti);
+        biglietto.setBagagli(bagaglioService.findByTicket(biglietto.getId()));
+        return biglietto;
     }
     
     public List<Biglietto> findByPassenger(Integer id) {
         if(id == null) return null;
-        Map<Integer, Map<String,String>> ris = bigliettoDao.readByIdPassenger(id);
-        List<Biglietto> lb = new ArrayList<>();
-        for(Map<String,String> m : ris.values()){
-            lb.add((Biglietto)Factory.getInstance().make(m));
+        Map<Integer, Map<String,String>> mappaBiglietti = bigliettoDao.readByIdPassenger(id);
+        List<Biglietto> listaBiglietti = new ArrayList<>();
+        for(Map<String,String> mappa : mappaBiglietti.values()){
+            listaBiglietti.add((Biglietto)Factory.getInstance().make(mappa));
         }
-        return lb;
+        return listaBiglietti;
 }
 }
