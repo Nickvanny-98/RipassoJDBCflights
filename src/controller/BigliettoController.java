@@ -20,10 +20,10 @@ public class BigliettoController {
     public String list(){
         //StringBuilder stringBuilder= new StringBuilder();
        String bigliettoGraficato=new String();
-        for (Biglietto b: bigliettoService.findAll()){
+        for (Biglietto biglietto: bigliettoService.findAll()){
 
             //stringBuilder.append(view.renderAlbum(a));
-            bigliettoGraficato+=view.renderBiglietto(b)+"\n";
+            bigliettoGraficato+=view.renderBiglietto(biglietto)+"\n";
         }
         return bigliettoGraficato;
     }

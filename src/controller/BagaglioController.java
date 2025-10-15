@@ -19,10 +19,10 @@ private final View view;
     public String list(){
         //StringBuilder stringBuilder= new StringBuilder();
        String bagaglioGraficato=new String();
-        for (Bagaglio b: bagaglioService.findAll()){
+        for (Bagaglio bagaglio: bagaglioService.findAll()){
 
             //stringBuilder.append(view.renderAlbum(a));
-            bagaglioGraficato+=view.renderBagaglio(b)+"\n";
+            bagaglioGraficato+=view.renderBagaglio(bagaglio)+"\n";
         }
         return bagaglioGraficato;
     }
