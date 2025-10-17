@@ -12,11 +12,18 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
 
     private final String INSERT = "INSERT INTO passenger (first_name, last_name, dob, document_no, nationality, email, phone) VALUES (?,?,?,?,?,?,?)";
     private final String READ = "SELECT * FROM passenger";
-    private final String DELETE = "DELETE FROM passenger WHERE passenger_id = ?";
-    private final String UPDATE = "UPDATE passenger SET first_name = ?, last_name = ?, dob = ?, document_no = ? , nationality = ? , email = ?, phone = ? WHERE passenger_id = ?";
     private final String READONE = "SELECT * FROM passenger WHERE passenger_id = ?";
-    private final String FINDBYNAME = "select * from passenger where first_name like %?%";
+    private final String READBYNAME = "SLECT * FROM passenger where first_name like %?%";
+    // TODO: implementare metodo
+    private final String READBYFARECLASS = "SELECT p.* FROM passenger p INNER JOIN ticket t ON p.passenger_id = t.passenger_id ORDER BY t.fare_class";
+    // TODO: implementare metodo
+    private final String READBYTICKET = "SELECT p.* FROM passenger p INNER JOIN ticket t ON p.passenger_id = t.passenger_id WHERE t.ticket_id = ?";
+    private final String UPDATE = "UPDATE passenger SET first_name = ?, last_name = ?, dob = ?, document_no = ? , nationality = ? , email = ?, phone = ? WHERE passenger_id = ?";
+    private final String DELETE = "DELETE FROM passenger WHERE passenger_id = ?";
     
+    
+    
+
 
     public static PasseggeroDao instance;
 
@@ -33,9 +40,9 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
     }
 
     @Override
-    public Integer addEntity(Passeggero passeggero) {
+    public Integer addEntity(Passeggero passeggero, Integer... FK) {
 
-        if (passeggero == null) {
+        if (passeggero == null || FK.length!=0) {
             return null;
         }
 
@@ -51,7 +58,7 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
             
         );
 
-        b.setId(id);
+        passeggero.setId(id);
         return id;
     }
 
@@ -62,9 +69,9 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
         return mappa;
     }
     @Override
-    public void update(Passeggero passeggero) {
+    public void update(Passeggero passeggero, Integer... FK) {
         
-        if (passeggero == null || passeggero.getId() == null){
+        if (passeggero == null || passeggero.getId() == null || FK.length!=0){
             return;
         }
 
@@ -72,7 +79,7 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
             UPDATE,
             passeggero.getNome(),
             passeggero.getCognome(),
-            passeggero.getDataNascita() == null ? null : b.getDataNascita()+"",
+            passeggero.getDataNascita() == null ? null : passeggero.getDataNascita()+"",
             passeggero.getNumeroDocumento(),
             passeggero.getNazionalita(),
             passeggero.getEmail(),
@@ -106,7 +113,7 @@ public class PasseggeroDao implements GenericDao<Passeggero>{
     public Map<Integer, Map<String,String>> findByName(String name){
        Map<Integer, Map<String,String>> ris;
 
-       ris = DATABASE.executeDQL(FINDBYNAME, name);
+       ris = DATABASE.executeDQL(READBYNAME, name);
 
        ris.forEach((k,v) -> v.put("tipoOggetto", "passeggero"));
 

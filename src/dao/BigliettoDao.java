@@ -11,13 +11,13 @@ public class BigliettoDao implements GenericDao<Biglietto> {
     
     private final IDatabase DATABASE;
 
-    private final String INSERT = "INSERT INTO ticket (ticket_no, fare_class, cabin_class, seat_number, price_amount, price_currency, status) VALUES (?,?,?,?,?,?,?)";
+    private final String INSERT = "INSERT INTO ticket (ticket_no, passenger_id, fare_class, cabin_class, seat_number, price_amount, price_currency, status) VALUES (?,?,?,?,?,?,?,?)";
     private final String READ = "SELECT * FROM ticket";
-    private final String DELETE = "DELETE FROM ticket WHERE ticket_id = ?";
-    private final String UPDATE = "UPDATE ticket SET ticket_no = ?, fare_class = ?, cabin_class = ?, seat_number = ? , price_amount = ? , price_currency = ?, status = ? WHERE ticket_id = ?";
     private final String READONE = "SELECT * FROM ticket WHERE ticket_id = ?";
-    private final String UPDATEFK = "UPDATE ticket SET passenger_id = ? WHERE ticket_id = ?";
-    private final String READBYPASSENGER = "select b.* from passenger b inner join ticket t on t.passenger_id = b.passenger_id where t.passenger_id = ?";
+    private final String READBYPASSENGER = "SELECT b.* FROM passenger b INNER JOIN ticket t ON t.passenger_id = b.passenger_id WHERE t.passenger_id = ?";
+    private final String UPDATE = "UPDATE ticket SET ticket_no = ?, passenger_id = ?, fare_class = ?, cabin_class = ?, seat_number = ? , price_amount = ? , price_currency = ?, status = ? WHERE ticket_id = ?";
+    private final String DELETE = "DELETE FROM ticket WHERE ticket_id = ?";
+
 
     public static BigliettoDao instance;
 
@@ -34,15 +34,16 @@ public class BigliettoDao implements GenericDao<Biglietto> {
     }
 
     @Override
-    public Integer addEntity(Biglietto biglietto) {
+    public Integer addEntity(Biglietto biglietto, Integer... FK) {
 
-        if (biglietto == null) {
+        if (biglietto == null || FK.length!=1 || FK[0] == null) {
             return null;
         }
 
         Integer id = DATABASE.executeUpdate(
             INSERT,
             biglietto.getNumeroBiglietto(),
+            String.valueOf(FK[0]),
             biglietto.getClasseTariffaria()+"",
             biglietto.getCabinClass(),
             biglietto.getNumeroPosto(),
@@ -62,20 +63,22 @@ public class BigliettoDao implements GenericDao<Biglietto> {
         mappa.forEach((k, v) -> v.put("tipoOggetto", "biglietto"));
         return mappa;
     }
+
     @Override
-    public void update(Biglietto biglietto) {
+    public void update(Biglietto biglietto, Integer... FK) {
         
-        if (biglietto == null || biglietto.getId() == null){
+        if (biglietto == null || biglietto.getId() == null || FK.length!=1 || FK[0] == null){
             return;
         }
 
         DATABASE.executeUpdate(
             UPDATE,
             biglietto.getNumeroBiglietto(),
+            String.valueOf(FK[0]),
             biglietto.getClasseTariffaria()+"",
             biglietto.getCabinClass(),
             biglietto.getNumeroPosto(),
-            biglietto.getPrezzo() == null ? null : b.getPrezzo()+"",
+            biglietto.getPrezzo() == null ? null : biglietto.getPrezzo()+"",
             biglietto.getValuta()+"",
             biglietto.getStatoBiglietto(),
             String.valueOf(biglietto.getId()));
@@ -102,15 +105,6 @@ public class BigliettoDao implements GenericDao<Biglietto> {
         ris.forEach((k, v) -> v.put("tipoOggetto", "biglietto"));
         
         return ris.get(id);
-    }
-
-    public void updateFK(Integer id, Integer newFK){
-
-        if (id == null || newFK == null){
-            return;
-        }
-        DATABASE.executeUpdate(UPDATEFK, id + "", newFK + "");
-
     }
 
     public Map<Integer, Map<String, String>> readByIdPassenger(Integer id) {

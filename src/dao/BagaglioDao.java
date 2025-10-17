@@ -10,13 +10,19 @@ public class BagaglioDao implements GenericDao<Bagaglio> {
     
     private final IDatabase DATABASE;
 
-    private final String INSERT = "INSERT INTO baggage (tag_code,weight_kg, is_oversize) VALUES (?,?,?)";
+    private final String INSERT = "INSERT INTO baggage (tag_code, ticket_id, weight_kg, is_oversize) VALUES (?,?,?,?)";
     private final String READ = "SELECT * FROM baggage";
-    private final String DELETE = "DELETE FROM baggage WHERE bag_id = ?";
-    private final String UPDATE = "UPDATE baggage SET tag_code = ?, weight_kg = ?, is_oversize = ? WHERE bag_id = ?";
     private final String READONE = "SELECT * FROM baggage WHERE bag_id = ?";
-    private final String UPDATEFK = "UPDATE baggage SET ticket_id = ? WHERE bag_id = ?";
-    private final String READBYIDTICKET = "select b.* from baggage b inner join ticket t on t.ticket_id = b.ticket_id where t.ticket_id = ?";
+    private final String READBYIDTICKET = "SELECT b.* FROM baggage b INNER JOIN ticket t ON t.ticket_id = b.ticket_id WHERE t.ticket_id = ?";
+    // TODO: implementare metodo
+    private final String READFINALWEIGHT = "SELECT SUM(weight_kg) FROM baggage";
+    // TODO: implementare metodo
+    private final String READOVERSIZELUGGAGES = "SELECT * FROM baggage WHERE is_oversize = TRUE";
+    private final String UPDATE = "UPDATE baggage SET tag_code = ?, ticket_id = ?, weight_kg = ?, is_oversize = ? WHERE bag_id = ?";
+    private final String DELETE = "DELETE FROM baggage WHERE bag_id = ?";
+    
+    
+    
 
 
     public static BagaglioDao instance;
@@ -34,15 +40,16 @@ public class BagaglioDao implements GenericDao<Bagaglio> {
     }
 
     @Override
-    public Integer addEntity(Bagaglio bagaglio) {
+    public Integer addEntity(Bagaglio bagaglio, Integer... FK) {
 
-        if (bagaglio == null) {
+        if (bagaglio == null || FK.length!=1 || FK[0] == null) {
             return null;
         }
 
         Integer id = DATABASE.executeUpdate(
             INSERT,
             bagaglio.getCodiceEtichetta(),
+            String.valueOf(FK[0]),
             bagaglio.getPeso() == null ? null : String.valueOf(bagaglio.getPeso()),
             bagaglio.isOversize() ? "1" : "0"
             
@@ -58,16 +65,18 @@ public class BagaglioDao implements GenericDao<Bagaglio> {
         mappa.forEach((k, v) -> v.put("tipoOggetto", "bagaglio"));
         return mappa;
     }
+
     @Override
-    public void update(Bagaglio bagaglio) {
+    public void update(Bagaglio bagaglio, Integer... FK) {
         
-        if (bagaglio == null || bagaglio.getId() == null){
+        if (bagaglio == null || bagaglio.getId() == null || FK.length!=1 || FK[0] == null){
             return;
         }
 
         DATABASE.executeUpdate(
             UPDATE,
             bagaglio.getCodiceEtichetta(),
+            String.valueOf(FK[0]),
             bagaglio.getPeso() == null ? null : String.valueOf(bagaglio.getPeso()),
             bagaglio.isOversize() ? "1" : "0",
             String.valueOf(bagaglio.getId()));
@@ -103,12 +112,5 @@ public class BagaglioDao implements GenericDao<Bagaglio> {
         return ris;
     }
 
-    public void updateFK(Integer id, Integer newFK){
-
-        if (id == null || newFK == null){
-            return;
-        }
-        DATABASE.executeUpdate(UPDATEFK, id + "", newFK + "");
-
-    }
+    
 }
